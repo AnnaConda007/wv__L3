@@ -4,6 +4,7 @@ import { formatPrice } from '../../utils/helpers';
 import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
+import { favoriteService } from '../../services/favorite.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -11,7 +12,6 @@ class ProductDetail extends Component {
 
   constructor(props: any) {
     super(props);
-
     this.more = new ProductList();
     this.more.attach(this.view.more);
   }
@@ -48,6 +48,17 @@ class ProductDetail extends Component {
       .then((products) => {
         this.more.update(products);
       });
+
+    this.view.btnFav.onclick = async () => {
+      if (this.product == undefined) return;
+      const isInFavorites = favoriteService.isInFavorites(this.product);
+      if (isInFavorites) return;
+
+      this._addToFavorites();
+
+      const favorites = favoriteService.getFavorites();
+      console.log('Список избранных товаров:', favorites);
+    };
   }
 
   private _addToCart() {
@@ -60,6 +71,16 @@ class ProductDetail extends Component {
   private _setInCart() {
     this.view.btnBuy.innerText = '✓ В корзине';
     this.view.btnBuy.disabled = true;
+  }
+
+  private _addToFavorites() {
+    if (!this.product) return;
+    favoriteService.addToFavorites(this.product);
+    this._setInFavorites();
+  }
+
+  private _setInFavorites() {
+    this.view.btnFav.innerText = '✓ В избранном';
   }
 }
 
