@@ -30,16 +30,17 @@ class Checkout extends Component {
 
   private async _makeOrder() {
     await cartService.clear();
-  const data =  fetch('/api/makeOrder', {// возвращается верстка
+    fetch('/api/makeOrder', {
+      // возвращается верстка
       method: 'POST',
       body: JSON.stringify(this.products)
     });
     sendEvent('purchase', {
-      orderId: "randomId",  
+      orderId: 'randomId',
       totalPrice: this.products.reduce((acc, product) => acc + product.salePriceU, 0),
       productIds: this.products.map((product) => product.id)
     });
-   // window.location.href = '/?isSuccessOrder';
+    // window.location.href = '/?isSuccessOrder';
   }
 }
 

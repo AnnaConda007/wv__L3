@@ -174,3 +174,48 @@ img {
     margin-bottom: 30px;
   }
 }
+
+.search-suggestions {
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+#search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.suggestion-item {
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: black;
+}
+.suggestions-list.visible {
+  display: block;
+}
+
+.suggestions-list div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions-list div:hover {
+  background-color: #f7f7f7;
+}

@@ -1,6 +1,7 @@
 import { addElement } from '../../utils/helpers';
 import { Component } from '../component';
 import html from './homepage.tpl.html';
+import SearchModule from '../SearchModule';
 
 import { ProductList } from '../productList/productList';
 
@@ -15,6 +16,8 @@ class Homepage extends Component {
   }
 
   render() {
+    new SearchModule();
+
     fetch('/api/getPopularProducts')
       .then((res) => res.json())
       .then((products) => {
