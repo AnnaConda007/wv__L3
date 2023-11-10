@@ -7,7 +7,6 @@ class SearchModule {
   private searchInput: HTMLInputElement;
   private suggestionsList: HTMLDivElement;
   private productList: Product[] = [];
-
   constructor() {
     const searchInput = document.getElementById('search-input');
     const suggestionsList = document.getElementById('suggestions-list');
