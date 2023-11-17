@@ -5,7 +5,7 @@ import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
 import { favoriteService } from '../../services/favorite.service';
- 
+
 class ProductDetail extends Component {
   more: ProductList;
   product?: ProductData;
@@ -32,11 +32,13 @@ class ProductDetail extends Component {
     this.view.description.innerText = description;
     this.view.price.innerText = formatPrice(salePriceU);
     this.view.btnBuy.onclick = this._addToCart.bind(this);
+    this.view.btnFav.onclick = this._addToFavorites.bind(this);
 
     const isInCart = await cartService.isInCart(this.product);
+    const isFav = favoriteService.isInFavorites(this.product);
 
     if (isInCart) this._setInCart();
-
+    if (isFav) this._setInFavorites();
     fetch(`/api/getProductSecretKey?id=${id}`)
       .then((res) => res.json())
       .then((secretKey) => {
@@ -48,17 +50,6 @@ class ProductDetail extends Component {
       .then((products) => {
         this.more.update(products);
       });
-
-    this.view.btnFav.onclick = async () => {
-      if (this.product == undefined) return;
-      const isInFavorites = favoriteService.isInFavorites(this.product);
-      if (isInFavorites) return;
-
-      this._addToFavorites();
-
-      const favorites = favoriteService.getFavorites();
-      console.log('Список избранных товаров:', favorites);
-    };
   }
 
   private _addToCart() {
@@ -78,7 +69,6 @@ class ProductDetail extends Component {
     favoriteService.addToFavorites(this.product);
     this._setInFavorites();
   }
-
   private _setInFavorites() {
     this.view.btnFav.innerText = '✓ В избранном';
   }

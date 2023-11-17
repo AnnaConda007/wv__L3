@@ -5,6 +5,7 @@ import { formatPrice } from '../../utils/helpers';
 import { cartService } from '../../services/cart.service';
 import { ProductData } from 'types';
 import sendEvent from '../../utils/eventTracker';
+
 class Checkout extends Component {
   products!: ProductData[];
 
@@ -31,7 +32,6 @@ class Checkout extends Component {
   private async _makeOrder() {
     await cartService.clear();
     fetch('/api/makeOrder', {
-      // возвращается верстка
       method: 'POST',
       body: JSON.stringify(this.products)
     });

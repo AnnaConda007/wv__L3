@@ -1,14 +1,17 @@
 import { ProductData } from 'types';
 
 class FavoriteService {
-  private favorites: ProductData[] = [];
+  private favorites!: ProductData[];
+
+  constructor() {
+    const favoritesStr = localStorage.getItem('fav');
+    this.favorites = favoritesStr ? JSON.parse(favoritesStr) : [];
+  }
 
   addToFavorites(product: ProductData) {
     this.favorites.push(product);
-    const favoritesStr = localStorage.getItem('fav');
-    const favorites = favoritesStr ? JSON.parse(favoritesStr) : [];
-    favorites.push(product);
-    localStorage.setItem('fav', JSON.stringify(favorites));
+    this.favorites.push(product);
+    localStorage.setItem('fav', JSON.stringify(this.favorites));
   }
 
   isInFavorites(product: ProductData): boolean {
