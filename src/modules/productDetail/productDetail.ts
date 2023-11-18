@@ -4,6 +4,7 @@ import { formatPrice } from '../../utils/helpers';
 import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
+import { userService } from '../../services/user.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -43,10 +44,21 @@ class ProductDetail extends Component {
         this.view.secretKey.setAttribute('content', secretKey);
       });
 
-    fetch('/api/getPopularProducts')
+    userService
+      .getId()
+      .then((id) => {
+        return fetch('/api/getPopularProducts', {
+          headers: {
+            UserID: id  
+          }
+        });
+      })
       .then((res) => res.json())
       .then((products) => {
         this.more.update(products);
+      })
+      .catch((error) => {
+        console.error('Произошла ошибка при получении данных:', error);
       });
   }
 

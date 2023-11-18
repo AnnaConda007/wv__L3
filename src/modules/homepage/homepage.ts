@@ -1,7 +1,7 @@
 import { addElement } from '../../utils/helpers';
 import { Component } from '../component';
 import html from './homepage.tpl.html';
-
+import { userService } from '../../services/user.service';
 import { ProductList } from '../productList/productList';
 
 class Homepage extends Component {
@@ -15,11 +15,17 @@ class Homepage extends Component {
   }
 
   render() {
-    fetch('/api/getPopularProducts')
-      .then((res) => res.json())
-      .then((products) => {
-        this.popularProducts.update(products);
-      });
+    userService.getId().then((id) => {
+      fetch('/api/getPopularProducts', {
+        headers: {
+          UserID: id
+        }
+      })
+        .then((res) => res.json())
+        .then((products) => {
+          this.popularProducts.update(products);
+        });
+    });
 
     const isSuccessOrder = new URLSearchParams(window.location.search).get('isSuccessOrder');
     if (isSuccessOrder != null) {
