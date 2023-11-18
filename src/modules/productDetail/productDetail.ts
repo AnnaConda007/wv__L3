@@ -49,7 +49,7 @@ class ProductDetail extends Component {
       .then((id) => {
         return fetch('/api/getPopularProducts', {
           headers: {
-            UserID: id  
+            UserID: id
           }
         });
       })
