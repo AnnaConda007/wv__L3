@@ -17,18 +17,15 @@ export class ProductList {
   initObserver() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        
-        if (!entry.isIntersecting) return
-          const productIdAttr = entry.target.getAttribute('data-product-id');
-          const productId = Number(productIdAttr) 
-          if (!productId ) return
-            const productData = this.products.find((p) => p.id === productId);
-            if (productData) {
-              const eventType = productData.log ? 'viewCardPromo' : 'viewCard';
-              sendEvent(eventType, { ...productData, timestamp: Date.now() });
-            }
-          
-        
+        if (!entry.isIntersecting) return;
+        const productIdAttr = entry.target.getAttribute('data-product-id');
+        const productId = Number(productIdAttr);
+        if (!productId) return;
+        const productData = this.products.find((p) => p.id === productId);
+        if (productData) {
+          const eventType = productData.log ? 'viewCardPromo' : 'viewCard';
+          sendEvent(eventType, { ...productData, timestamp: Date.now() });
+        }
       });
     });
 
