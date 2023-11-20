@@ -1,23 +1,14 @@
- interface Product {
-  id: number;
-  name: string;
- }
+import { ProductData } from 'types';
 
 class SearchModule {
   private searchInput: HTMLInputElement;
   private suggestionsList: HTMLDivElement;
-  private productList: Product[] = [];
+  private productList: ProductData[] = [];
   constructor() {
-    const searchInput = document.getElementById('search-input');
-    const suggestionsList = document.getElementById('suggestions-list');
-    if (searchInput instanceof HTMLInputElement && suggestionsList instanceof HTMLDivElement) {
-      this.searchInput = searchInput;
-      this.suggestionsList = suggestionsList;
-      this.addEventListeners();
-      this.fetchProducts();
-    } else {
-      throw new Error('Cannot initialize search module: required elements not found.');
-    }
+    this.searchInput = document.getElementById('search-input') as HTMLInputElement;
+    this.suggestionsList = document.getElementById('suggestions-list') as HTMLDivElement;
+    this.addEventListeners();
+    this.fetchProducts();
   }
 
   private addEventListeners(): void {
@@ -27,34 +18,32 @@ class SearchModule {
   private async fetchProducts(): Promise<void> {
     try {
       const response = await fetch('/api/getProducts');
-      const products: Product[] = await response.json();
+      const products: ProductData[] = await response.json();
       this.productList = products;
-    } catch (error) {
+     } catch (error) {
       console.error('Error fetching products:', error);
     }
   }
 
   private handleInput(): void {
     const value = this.searchInput.value.trim();
-  
+
     if (value) {
-      const filteredSuggestions = this.productList
-        .filter((product) => product.name.toLowerCase().includes(value.toLowerCase()));
-  
+      const filteredSuggestions = this.productList.filter((product) =>
+        product.name.toLowerCase().includes(value.toLowerCase())
+      );
       this.showSuggestions(filteredSuggestions);
     } else {
       this.hideSuggestions();
     }
   }
-  
 
-  private showSuggestions(suggestions: Product[]): void {
+  private showSuggestions(suggestions: ProductData[]): void {
     this.suggestionsList.innerHTML = suggestions
       .map((product) => `<a href="/product?id=${product.id}" class="suggestion-item">${product.name}</a>`)
       .join('');
     this.suggestionsList.style.display = 'block';
   }
-  
 
   private hideSuggestions(): void {
     this.suggestionsList.innerHTML = '';
