@@ -5,6 +5,7 @@ import { formatPrice } from '../../utils/helpers';
 import { cartService } from '../../services/cart.service';
 import { ProductData } from 'types';
 import sendEvent from '../../utils/eventTracker';
+import { genUUID } from '../../utils/helpers';
 
 class Checkout extends Component {
   products!: ProductData[];
@@ -35,11 +36,13 @@ class Checkout extends Component {
       method: 'POST',
       body: JSON.stringify(this.products)
     });
+    const totalPrice = this.products.reduce((acc, product) => acc + product.salePriceU, 0);
     sendEvent('purchase', {
-      orderId: 'randomId',
-      totalPrice: this.products.reduce((acc, product) => acc + product.salePriceU, 0),
-      productIds: this.products.map((product) => product.id)
+      totalPrice: totalPrice,
+      productIds: this.products.map((product) => product.id),
+      orderId: `${totalPrice}_${genUUID()}`
     });
+
     // window.location.href = '/?isSuccessOrder';
   }
 }

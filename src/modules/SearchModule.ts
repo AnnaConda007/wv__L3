@@ -20,7 +20,7 @@ class SearchModule {
       const response = await fetch('/api/getProducts');
       const products: ProductData[] = await response.json();
       this.productList = products;
-     } catch (error) {
+    } catch (error) {
       console.error('Error fetching products:', error);
     }
   }
@@ -40,6 +40,7 @@ class SearchModule {
 
   private showSuggestions(suggestions: ProductData[]): void {
     this.suggestionsList.innerHTML = suggestions
+      .slice(0, 10)
       .map((product) => `<a href="/product?id=${product.id}" class="suggestion-item">${product.name}</a>`)
       .join('');
     this.suggestionsList.style.display = 'block';
